@@ -1,31 +1,257 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FreshCart Express</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="FreshCart Express - Your colorful modern grocery store website." />
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#111827;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --primary:#22c55e;
+      --secondary:#06b6d4;
+      --accent:#f97316;
+      --pink:#ec4899;
+      --yellow:#facc15;
+      --shadow:0 20px 50px rgba(0,0,0,.25);
+      --radius:24px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(236,72,153,.25), transparent 30%),
+        radial-gradient(circle at top right, rgba(6,182,212,.22), transparent 28%),
+        linear-gradient(135deg, #020617 0%, #0f172a 45%, #111827 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1180px,92%);margin:auto}
+    .navbar{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(14px);
+      background:rgba(2,6,23,.7);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .nav-inner{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 0;gap:16px;
+    }
+    .logo{
+      display:flex;align-items:center;gap:12px;font-weight:800;font-size:1.2rem;
+    }
+    .logo-badge{
+      width:44px;height:44px;border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary),var(--pink));
+      display:grid;place-items:center;
+      box-shadow:var(--shadow);
+    }
+    .nav-links{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+    .nav-links a{color:var(--muted);font-weight:600}
+    .nav-links a:hover{color:#fff}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;padding:14px 22px;border:none;border-radius:999px;
+      font-weight:700;cursor:pointer;transition:.3s ease;
+      box-shadow:var(--shadow);
+    }
+    .btn:hover{transform:translateY(-3px) scale(1.02)}
+    .btn-primary{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#001018}
+    .btn-accent{background:linear-gradient(135deg,var(--accent),var(--pink));color:#fff}
+    .hero{
+      padding:70px 0 40px;
+      display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center;
+    }
+    .hero h1{
+      font-size:clamp(2.4rem,6vw,5rem);
+      line-height:1.02;margin-bottom:18px;
+    }
+    .hero p{color:var(--muted);font-size:1.05rem;line-height:1.7;max-width:620px}
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+    .hero-card{
+      background:rgba(17,24,39,.7);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      padding:24px;
+      box-shadow:var(--shadow);
+    }
+    .stats{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px
+    }
+    .stat{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;padding:18px;text-align:center
+    }
+    .stat h3{font-size:1.5rem;color:#fff}
+    .stat p{font-size:.92rem;color:var(--muted);margin-top:6px}
+    .section{padding:30px 0 10px}
+    .section-title{
+      font-size:2rem;margin-bottom:14px
+    }
+    .section-sub{color:var(--muted);margin-bottom:24px;max-width:720px;line-height:1.7}
+    .grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:18px
+    }
+    .card{
+      background:rgba(17,24,39,.78);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;padding:22px;
+      box-shadow:var(--shadow);
+      transition:.3s ease;
+    }
+    .card:hover{transform:translateY(-6px)}
+    .icon{
+      width:56px;height:56px;border-radius:18px;
+      display:grid;place-items:center;font-size:1.4rem;margin-bottom:16px;
+      background:linear-gradient(135deg,var(--yellow),var(--accent));
+      color:#111827;
+    }
+    .card h3{margin-bottom:10px;font-size:1.2rem}
+    .card p{color:var(--muted);line-height:1.65}
+    .contact-box{
+      display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch
+    }
+    .contact-card{
+      background:linear-gradient(135deg, rgba(34,197,94,.18), rgba(6,182,212,.16));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px;padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .phone{
+      display:flex;align-items:center;gap:12px;
+      font-size:1.3rem;font-weight:800;margin:18px 0 24px;
+    }
+    .footer{
+      padding:28px 0 40px;color:var(--muted);text-align:center
+    }
+    .mini-pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 14px;border-radius:999px;
+      background:rgba(255,255,255,.08);color:#fff;font-size:.92rem
+    }
+    @media (max-width: 920px){
+      .hero,.grid,.contact-box{grid-template-columns:1fr}
+      .nav-inner{flex-direction:column;align-items:flex-start}
+      .nav-links{gap:12px}
+    }
+  </style>
 </head>
 <body>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="logo">
+        <div class="logo-badge">FC</div>
+        <span>FreshCart Express</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn-accent" href="tel:03064514032">Call Now</a>
+      </nav>
+    </div>
+  </header>
 
-<header>
-  <h2>FreshCart Express</h2>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="shop.html">Shop</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
-</header>
+  <main class="container" id="home">
+    <section class="hero">
+      <div>
+        <span class="mini-pill">Fresh groceries • Fast delivery • Modern service</span>
+        <h1>Welcome to FreshCart Express</h1>
+        <p>
+          A colorful modern grocery store website for your brand. Shop fresh items, enjoy fast service,
+          and contact us anytime at 03064514032.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#services">Explore Services</a>
+          <a class="btn btn-accent" href="tel:03064514032">03064514032</a>
+        </div>
+      </div>
 
-<div class="hero">
-  <h1>Fresh Groceries Delivered Fast</h1>
-  <p>Order essentials online and get instant confirmation emails</p>
-  <a class="btn" href="shop.html">Start Shopping</a>
-</div>
+      <div class="hero-card">
+        <h2 style="margin-bottom:10px;">Why choose us?</h2>
+        <p style="color:var(--muted);line-height:1.7">
+          We provide a bright, clean, and easy-to-use grocery experience with a modern look and strong call-to-action buttons.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <h3>24/7</h3>
+            <p>Support</p>
+          </div>
+          <div class="stat">
+            <h3>100%</h3>
+            <p>Fresh Quality</p>
+          </div>
+          <div class="stat">
+            <h3>Fast</h3>
+            <p>Delivery</p>
+          </div>
+          <div class="stat">
+            <h3>Modern</h3>
+            <p>Design</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="container">
-  <h2>Why Choose Us</h2>
-  <p>Reliable delivery, fresh products, and instant order confirmation emails.</p>
-</div>
+    <section class="section" id="services">
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-sub">
+        FreshCart Express is designed to look modern, colorful, and easy to navigate on mobile and desktop.
+      </p>
 
+      <div class="grid">
+        <div class="card">
+          <div class="icon">🛒</div>
+          <h3>Grocery Shopping</h3>
+          <p>Find daily essentials, snacks, and fresh items in a clean and user-friendly layout.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🚚</div>
+          <h3>Fast Delivery</h3>
+          <p>Show customers a strong delivery service message with bold, modern design sections.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📞</div>
+          <h3>Easy Contact</h3>
+          <p>Call us directly at 03064514032 using the phone button for quick customer response.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="contact-box">
+        <div class="contact-card">
+          <h2 class="section-title" style="margin-bottom:8px;">Contact Us</h2>
+          <p class="section-sub" style="margin-bottom:0;">
+            Use the buttons below to call or open a modern action button for your visitors.
+          </p>
+          <div class="phone">📱 03064514032</div>
+          <a class="btn btn-primary" href="tel:03064514032">Call 03064514032</a>
+        </div>
+
+        <div class="contact-card">
+          <h2 class="section-title" style="margin-bottom:8px;">Other Button</h2>
+          <p class="section-sub" style="margin-bottom:18px;">
+            Here is a colorful modern button you can use for offers, shopping, or special actions.
+          </p>
+          <a class="btn btn-accent" href="#home">Shop Now</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    © <span id="year"></span> FreshCart Express. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
